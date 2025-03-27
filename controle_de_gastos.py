@@ -118,17 +118,18 @@ if selected == 'Adicionar Transação':
 if selected == 'Dashboard':
     st.title("Dashboard")
 
+    # Baixar dados
     df_gastos = pd.read_sql_query("SELECT * FROM gastos ORDER BY data DESC", conn)
     df_receitas = pd.read_sql_query("SELECT * FROM receitas ORDER BY data DESC", conn)
     
-    # Converter 'data' para datetime e setar como índice
+    # Converter datas
     df_gastos['data'] = pd.to_datetime(df_gastos['data'])
     df_receitas['data'] = pd.to_datetime(df_receitas['data'])
     
     df_gastos = df_gastos.set_index('data')
     df_receitas = df_receitas.set_index('data')
     
-    # Data atual
+    # Datas padrão
     hoje = datetime.date.today()
     primeiro_dia = hoje.replace(day=1)
     ultimo_dia = hoje.replace(day=calendar.monthrange(hoje.year, hoje.month)[1])
@@ -150,19 +151,16 @@ if selected == 'Dashboard':
     temp_df_receitas = df_receitas.loc[(df_receitas.index >= pd.to_datetime(initial_period)) & (df_receitas.index <= pd.to_datetime(final_period))]
     
 
-    # st.subheader("Gastos")
-    # st.dataframe(df_gastos)
-
-    # st.subheader("Receitas")
-    # st.dataframe(df_receitas)
-
 
     st.markdown('##')
 
+    # Filtro
+    temp_df_gastos = df_gastos.loc[(df_gastos.index >= pd.to_datetime(initial_period)) & (df_gastos.index <= pd.to_datetime(final_period))]
+    temp_df_receitas = df_receitas.loc[(df_receitas.index >= pd.to_datetime(initial_period)) & (df_receitas.index <= pd.to_datetime(final_period))]
+    
+    # Exibição
     col1, col2 = st.columns(2)
     with col1:
-        total_gastos = temp_df_gastos['valor'].sum()
-        st.metric("Total Gastos", f"R$ {total_gastos:.2f}")
+        st.metric("Total Gastos", f"R$ {temp_df_gastos['valor'].sum():.2f}")
     with col2:
-        total_receitas = temp_df_receitas['valor'].sum()
-        st.metric("Total Receitas", f"R$ {total_receitas:.2f}")
+        st.metric("Total Receitas", f"R$ {temp_df_receitas['valor'].sum():.2f}")
