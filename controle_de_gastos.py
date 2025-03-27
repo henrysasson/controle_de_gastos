@@ -201,7 +201,7 @@ if selected == 'Dashboard':
 
     col4, col5 = st.columns(2)
 
-    with col3:
+    with col4:
 
         # Agrupa os gastos por categoria no período
         gastos_por_categoria = temp_df_gastos.groupby('categoria')['valor'].sum().reset_index()
