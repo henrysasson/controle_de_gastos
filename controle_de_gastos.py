@@ -207,6 +207,8 @@ if selected == 'Dashboard':
     # Remover a coluna auxiliar de ordenação, se não for mais necessária
     gastos_agrupados = gastos_agrupados.drop(columns='data_ordenacao')
 
+    gastos_agrupados.index = gastos_agrupados['data_ordenacao']
+
     
     # Gráfico de barras empilhadas
     fig = px.bar(
@@ -248,6 +250,8 @@ if selected == 'Dashboard':
     
     # Ordenar pela data datetime
     receitas_agrupadas = receitas_agrupadas.sort_values(by='data_ordenacao')
+
+    receitas_agrupadas.index = receitas_agrupadas['data_ordenacao']
     
     # Se quiser, pode descartar a coluna 'data_ordenacao' depois:
     receitas_agrupadas = receitas_agrupadas.drop(columns='data_ordenacao')
