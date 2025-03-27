@@ -167,17 +167,25 @@ if selected == 'Dashboard':
         st.metric("Total Receitas", f"R$ {temp_df_receitas['valor'].sum():.2f}")
 
 
-    # Agrupamento por data e categoria
-    gastos_agrupados = temp_df_gastos.groupby(['data', 'categoria'])['valor'].sum().reset_index()
+
+
+    # Resetar o índice para trabalhar com a coluna 'data'
+    temp_df_gastos = temp_df_gastos.reset_index()
+    
+    # Formatar a data como string no formato DD-MM-YYYY
+    temp_df_gastos['data_formatada'] = temp_df_gastos['data'].dt.strftime('%d-%m-%Y')
+    
+    # Agrupamento por data formatada e categoria
+    gastos_agrupados = temp_df_gastos.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index()
     
     # Gráfico de barras empilhadas
     fig = px.bar(
         gastos_agrupados,
-        x='data',
+        x='data_formatada',
         y='valor',
         color='categoria',
         title='Gastos Diários por Categoria',
-        labels={'data': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
+        labels={'data_formatada': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
         text_auto=True
     )
     
@@ -185,8 +193,8 @@ if selected == 'Dashboard':
         xaxis_title='Data',
         yaxis_title='Valor (R$)',
         legend_title='Categoria',
-        barmode='stack',
-        xaxis=dict(type='category')
+        barmode='stack'
     )
     
     st.plotly_chart(fig, use_container_width=True)
+
