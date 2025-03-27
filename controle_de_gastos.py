@@ -77,18 +77,63 @@ if selected == 'Input':
     valor = st.number_input("Valor (R$)", value=0.00, format="%.2f")
 
     if input_type == "Gasto":
-        categoria = st.selectbox("Categoria", (
-            "Alimentação", "Compras", "Estética", "Farmácia", "Future Me",
-            "Investimento", "Lazer", "Outros", "Transporte"
-        ))
-    else:
-        categoria = st.selectbox("Categoria", (
-            "Salário", "Comissão", "Outros"
-        ))
 
-    descricao = st.text_input("Descrição", placeholder="Ex: Uber, iFood, Cinema...")
-    forma_pagamento = st.selectbox("Forma de Pagamento", ("Crédito", "PIX", "Dinheiro", "Débito"))
-    recorrente = st.selectbox("Recorrente?", ("Não", "Sim"))
+        # DATA
+        date = d = st.date_input("Data", datetime.datetime.now(), format="DD.MM.YYYY")
+
+        st.markdown('##')
+
+        # VALOR
+        value = st.number_input("Valor (R$)", value=0.00, format="%0.2f")
+
+        st.markdown('##')
+
+        # CATEGORIA
+        category = st.selectbox("Categoria",
+                    ("Alimentação", "Compras", "Estética", "Farmácia", "Future Me", "Investimento", "Lazer", "Outros", "Transporte"),
+                    placeholder="Selecione a categoria",
+                    )
+        
+        st.markdown('##')
+
+        # DESCRIÇÃO
+        description = st.text_input("Descrição",
+                                    label_visibility="visible",
+                                    placeholder="Descrição curta do gasto (Ifood, Cinema, ...)",
+                                )
+
+        st.markdown('##')
+
+        # FORMA DE PAGAMENTO
+        payment = st.selectbox("Forma de Pagamento",
+                    ("Crédito", "PIX", "Dinheiro", "Débito"),
+                    placeholder="Selecione a forma de pagamento",)
+        
+        st.markdown('##')
+
+        # RECORRNTE
+        recurrence = st.selectbox("Recorrente?",
+                    ("Não", "Sim"))
+
+
+    if input_type == "Receita":
+
+        # DATA
+        date = d = st.date_input("Data", datetime.datetime.now(), format="DD.MM.YYYY")
+
+        st.markdown('##')
+
+        # VALOR
+        value = st.number_input("Valor (R$)", value=0.00, format="%0.2f")
+
+        st.markdown('##')
+
+        # CATEGORIA
+        category = st.selectbox("Categoria",
+                    ("Salário", "Comissão", "Outros"),
+                    placeholder="Selecione a categoria",
+                    )
+    
 
     if st.button("Salvar"):
         cursor.execute('''
