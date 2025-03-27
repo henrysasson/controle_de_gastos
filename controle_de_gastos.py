@@ -159,7 +159,7 @@ if selected == 'Dashboard':
 
     
     # Exibição
-    col3, col4, col5 = st.columns(2)
+    col3, col4, col5 = st.columns(3)
     meta = 3000
     
     with col3:
