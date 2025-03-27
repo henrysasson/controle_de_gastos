@@ -204,7 +204,7 @@ if selected == 'Dashboard':
     # Ordenar cronologicamente
     gastos_agrupados = gastos_agrupados.sort_values(by='data_ordenacao')
     
-    # ✅ Setar o índice ANTES de remover a coluna
+    # Setar o índice ANTES de remover a coluna
     gastos_agrupados.index = gastos_agrupados['data_ordenacao']
     
     # Agora pode remover, se quiser
@@ -214,7 +214,7 @@ if selected == 'Dashboard':
     
     # Gráfico de barras empilhadas
     fig = px.bar(
-        gastos_agrupados.sort_values(by='data_formatada'),
+        gastos_agrupados,
         x='data_formatada',
         y='valor',
         color='categoria',
