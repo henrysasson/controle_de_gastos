@@ -7,6 +7,7 @@ import base64
 import os
 import warnings
 import calendar
+import plotly.express as px
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
