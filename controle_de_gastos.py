@@ -163,11 +163,14 @@ if selected == 'Dashboard':
     meta = 3000
     
     with col3:
-        if temp_df_gastos['valor'] > meta:
-            delta="Acima do Limite"
-            st.metric("Total Gastos no Período", f"R$ {temp_df_gastos['valor'].sum():.2f}", delta)
+        total_gasto = temp_df_gastos['valor'].sum()
+
+        if total_gasto > meta:
+            delta = "Acima do Limite"
+            st.metric("Total Gastos no Período", f"R$ {total_gasto:.2f}", delta)
         else:
-            st.metric("Total Gastos no Período", f"R$ {temp_df_gastos['valor'].sum():.2f}")
+            st.metric("Total Gastos no Período", f"R$ {total_gasto:.2f}")
+
     with col4:
         st.metric(f"Distância da Meta (R$ {meta:.2f})", f"R$ {(meta - temp_df_gastos['valor'].sum()):.2f}")
     
