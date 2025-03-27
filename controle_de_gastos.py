@@ -210,18 +210,23 @@ if selected == 'Dashboard':
     # Agora pode remover, se quiser
     gastos_agrupados = gastos_agrupados.drop(columns='data_ordenacao')
 
+    # Obter a ordem correta das datas formatadas após o sort
+    ordem_datas = gastos_agrupados['data_formatada'].unique().tolist()
+
 
     
     # Gráfico de barras empilhadas
     fig = px.bar(
-        gastos_agrupados,
-        x='data_formatada',
-        y='valor',
-        color='categoria',
-        title='Gastos Diários por Categoria',
-        labels={'data_formatada': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
-        text_auto=True
-    )
+    gastos_agrupados,
+    x='data_formatada',
+    y='valor',
+    color='categoria',
+    title='Gastos Diários por Categoria',
+    labels={'data_formatada': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
+    text_auto=True,
+    category_orders={'data_formatada': ordem_datas}  # <- força a ordem correta no eixo X
+)
+
     
     fig.update_layout(
         xaxis_title='Data',
