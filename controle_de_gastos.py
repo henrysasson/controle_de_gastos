@@ -45,7 +45,7 @@ if selected == 'Input':
         # VALOR
         value = st.number_input("Valor (R$)", value=0.00, format="%0.2f")
 
-        st.markdown('##')
+        # st.markdown('##')
 
         # CATEGORIA
         category = st.selectbox("Categoria",
