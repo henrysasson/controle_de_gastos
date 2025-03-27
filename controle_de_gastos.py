@@ -285,3 +285,9 @@ if selected == 'Dashboard':
         st.plotly_chart(fig_pizza_receitas, use_container_width=True)
 
 
+
+    st.subheader("Gastos")
+    st.dataframe(df_gastos)
+
+    st.subheader("Receitas")
+    st.dataframe(df_receitas)
