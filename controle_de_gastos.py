@@ -145,7 +145,7 @@ if selected == 'Dashboard':
     with col2:    
         final_period = st.date_input("Fim", ultimo_dia, format="DD.MM.YYYY")
 
-
+    st.markdown('##')
 
       
     temp_df_gastos = df_gastos.loc[(df_gastos.index >= pd.to_datetime(initial_period)) & (df_gastos.index <= pd.to_datetime(final_period))]
@@ -153,7 +153,6 @@ if selected == 'Dashboard':
     
 
 
-    st.markdown('##')
 
     # Filtro
     temp_df_gastos = df_gastos.loc[(df_gastos.index >= pd.to_datetime(initial_period)) & (df_gastos.index <= pd.to_datetime(final_period))]
