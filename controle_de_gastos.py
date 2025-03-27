@@ -158,6 +158,8 @@ if selected == 'Dashboard':
     # Filtro
     temp_df_gastos = df_gastos.loc[(df_gastos.index >= pd.to_datetime(initial_period)) & (df_gastos.index <= pd.to_datetime(final_period))]
     temp_df_receitas = df_receitas.loc[(df_receitas.index >= pd.to_datetime(initial_period)) & (df_receitas.index <= pd.to_datetime(final_period))]
+
+    st.markdown('#')
     
     # Exibição
     col3, col3 = st.columns(2)
