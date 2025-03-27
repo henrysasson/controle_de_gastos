@@ -263,17 +263,21 @@ if selected == 'Dashboard':
     # Se quiser, pode descartar a coluna 'data_ordenacao' depois:
     receitas_agrupadas = receitas_agrupadas.drop(columns='data_ordenacao')
 
+    # Obter a ordem correta das datas formatadas após o sort
+    ordem_datas = receitas_agrupadas['data_formatada'].unique().tolist()
+
     
     # Gráfico de barras empilhadas
-    fig_receitas = px.bar(
-        receitas_agrupadas.sort_values(by='data_formatada'),
-        x='data_formatada',
-        y='valor',
-        color='categoria',
-        title='Receitas Diárias por Categoria',
-        labels={'data_formatada': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
-        text_auto=True
-    )
+    fig = px.bar(
+    receitas_agrupadas,
+    x='data_formatada',
+    y='valor',
+    color='categoria',
+    title='Receitas Diárias por Categoria',
+    labels={'data_formatada': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
+    text_auto=True,
+    category_orders={'data_formatada': ordem_datas}  # <- força a ordem correta no eixo X
+)
     
     fig_receitas.update_layout(
         xaxis_title='Data',
