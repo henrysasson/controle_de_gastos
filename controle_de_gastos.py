@@ -12,7 +12,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 # CONFIGURAÇÕES DE INTEGRAÇÃO COM GITHUB
 GITHUB_TOKEN = st.secrets["github_token"]
 REPO = "henrysasson/controle_de_gastos"
-FILE_PATH = "gastos.db"
+FILE_PATH = "controle_pessoal.db"
 GITHUB_API_URL = f"https://api.github.com/repos/{REPO}/contents/{FILE_PATH}"
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
 
@@ -37,7 +37,7 @@ def upload_db():
     sha = r_get.json().get("sha") if r_get.status_code == 200 else None
 
     payload = {
-        "message": "update gastos.db",
+        "message": "update controle_pessoal.db",
         "content": content,
         "branch": "main"
     }
@@ -54,15 +54,23 @@ if not os.path.exists(FILE_PATH):
 conn = sqlite3.connect(FILE_PATH)
 cursor = conn.cursor()
 cursor.execute('''
-    CREATE TABLE IF NOT EXISTS transacoes (
+    CREATE TABLE IF NOT EXISTS gastos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         data TEXT,
         valor REAL,
         categoria TEXT,
         descricao TEXT,
         forma_pagamento TEXT,
-        recorrente TEXT,
-        tipo TEXT
+        recorrente TEXT
+    )
+''')
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS receitas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        data TEXT,
+        valor REAL,
+        categoria TEXT,
+        descricao TEXT
     )
 ''')
 conn.commit()
@@ -77,83 +85,51 @@ if selected == 'Input':
     valor = st.number_input("Valor (R$)", value=0.00, format="%.2f")
 
     if input_type == "Gasto":
+        categoria = st.selectbox("Categoria", (
+            "Alimentação", "Compras", "Estética", "Farmácia", "Future Me", "Investimento", "Lazer", "Outros", "Transporte"))
+        descricao = st.text_input("Descrição", placeholder="Ex: Uber, iFood, Cinema...")
+        forma_pagamento = st.selectbox("Forma de Pagamento", ("Crédito", "PIX", "Dinheiro", "Débito"))
+        recorrente = st.selectbox("Recorrente?", ("Não", "Sim"))
 
-        # DATA
-        date = d = st.date_input("Data", datetime.datetime.now(), format="DD.MM.YYYY")
-
-        st.markdown('##')
-
-        # VALOR
-        value = st.number_input("Valor (R$)", value=0.00, format="%0.2f")
-
-        st.markdown('##')
-
-        # CATEGORIA
-        category = st.selectbox("Categoria",
-                    ("Alimentação", "Compras", "Estética", "Farmácia", "Future Me", "Investimento", "Lazer", "Outros", "Transporte"),
-                    placeholder="Selecione a categoria",
-                    )
-        
-        st.markdown('##')
-
-        # DESCRIÇÃO
-        description = st.text_input("Descrição",
-                                    label_visibility="visible",
-                                    placeholder="Descrição curta do gasto (Ifood, Cinema, ...)",
-                                )
-
-        st.markdown('##')
-
-        # FORMA DE PAGAMENTO
-        payment = st.selectbox("Forma de Pagamento",
-                    ("Crédito", "PIX", "Dinheiro", "Débito"),
-                    placeholder="Selecione a forma de pagamento",)
-        
-        st.markdown('##')
-
-        # RECORRNTE
-        recurrence = st.selectbox("Recorrente?",
-                    ("Não", "Sim"))
-
+        if st.button("Salvar"):
+            cursor.execute('''
+                INSERT INTO gastos (data, valor, categoria, descricao, forma_pagamento, recorrente)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (str(date), valor, categoria, descricao, forma_pagamento, recorrente))
+            conn.commit()
+            upload_db()
+            st.success("Gasto salvo com sucesso!")
 
     if input_type == "Receita":
+        categoria = st.selectbox("Categoria", ("Salário", "Comissão", "Outros"))
+        descricao = st.text_input("Descrição", placeholder="Ex: Bônus, Projeto Freelancer...")
 
-        # DATA
-        date = d = st.date_input("Data", datetime.datetime.now(), format="DD.MM.YYYY")
-
-        st.markdown('##')
-
-        # VALOR
-        value = st.number_input("Valor (R$)", value=0.00, format="%0.2f")
-
-        st.markdown('##')
-
-        # CATEGORIA
-        category = st.selectbox("Categoria",
-                    ("Salário", "Comissão", "Outros"),
-                    placeholder="Selecione a categoria",
-                    )
-    
-
-    if st.button("Salvar"):
-        cursor.execute('''
-            INSERT INTO transacoes (data, valor, categoria, descricao, forma_pagamento, recorrente, tipo)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (str(date), valor, categoria, descricao, forma_pagamento, recorrente, input_type))
-        conn.commit()
-        upload_db()
-        st.success("Transação salva com sucesso!")
+        if st.button("Salvar"):
+            cursor.execute('''
+                INSERT INTO receitas (data, valor, categoria, descricao)
+                VALUES (?, ?, ?, ?)
+            ''', (str(date), valor, categoria, descricao))
+            conn.commit()
+            upload_db()
+            st.success("Receita salva com sucesso!")
 
 # DASHBOARD BÁSICO
 if selected == 'Dashboard':
     st.title("Dashboard")
-    df = pd.read_sql_query("SELECT * FROM transacoes ORDER BY data DESC", conn)
-    st.dataframe(df)
+
+    df_gastos = pd.read_sql_query("SELECT * FROM gastos ORDER BY data DESC", conn)
+    df_receitas = pd.read_sql_query("SELECT * FROM receitas ORDER BY data DESC", conn)
+
+    st.subheader("Gastos")
+    st.dataframe(df_gastos)
+
+    st.subheader("Receitas")
+    st.dataframe(df_receitas)
 
     col1, col2 = st.columns(2)
     with col1:
-        total_gastos = df[df['tipo'] == 'Gasto']['valor'].sum()
+        total_gastos = df_gastos['valor'].sum()
         st.metric("Total Gastos", f"R$ {total_gastos:.2f}")
     with col2:
-        total_receitas = df[df['tipo'] == 'Receita']['valor'].sum()
+        total_receitas = df_receitas['valor'].sum()
         st.metric("Total Receitas", f"R$ {total_receitas:.2f}")
