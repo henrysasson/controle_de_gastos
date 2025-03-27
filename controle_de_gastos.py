@@ -133,13 +133,8 @@ if selected == 'Dashboard':
     primeiro_dia = hoje.replace(day=1)
     ultimo_dia = hoje.replace(day=calendar.monthrange(hoje.year, hoje.month)[1])
     
-    # Inputs
-    initial_period = st.date_input("Início do Período", primeiro_dia, format="DD.MM.YYYY")
-    final_period = st.date_input("Fim do Período", ultimo_dia, format="DD.MM.YYYY")
-    
+ 
     # Filtro
-
-
     col1, col2= st.columns(2)
 
     with col1:
@@ -160,6 +155,9 @@ if selected == 'Dashboard':
 
     # st.subheader("Receitas")
     # st.dataframe(df_receitas)
+
+
+    st.markdown('##")
 
     col1, col2 = st.columns(2)
     with col1:
