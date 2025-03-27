@@ -164,3 +164,28 @@ if selected == 'Dashboard':
         st.metric("Total Gastos", f"R$ {temp_df_gastos['valor'].sum():.2f}")
     with col2:
         st.metric("Total Receitas", f"R$ {temp_df_receitas['valor'].sum():.2f}")
+
+
+    # Agrupamento por data e categoria
+    gastos_agrupados = temp_df_gastos.groupby(['data', 'categoria'])['valor'].sum().reset_index()
+    
+    # Gráfico de barras empilhadas
+    fig = px.bar(
+        gastos_agrupados,
+        x='data',
+        y='valor',
+        color='categoria',
+        title='Gastos Diários por Categoria',
+        labels={'data': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
+        text_auto=True
+    )
+    
+    fig.update_layout(
+        xaxis_title='Data',
+        yaxis_title='Valor (R$)',
+        legend_title='Categoria',
+        barmode='stack',
+        xaxis=dict(type='category')
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
