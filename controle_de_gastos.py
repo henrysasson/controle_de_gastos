@@ -231,7 +231,7 @@ if selected == 'Dashboard':
     
     # Gráfico de barras empilhadas
     fig_receitas = px.bar(
-        receitas_agrupadas,
+        receitas_agrupadas.sort_values(by='data_formatada'),
         x='data_formatada',
         y='valor',
         color='categoria',
