@@ -18,7 +18,7 @@ HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
 
 # CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(page_title='Controle de Gastos', layout='wide')
-options = ['Input', 'Dashboard']
+options = ['Adicionar Transação', 'Dashboard']
 selected = st.sidebar.selectbox('Menu Principal', options)
 
 # FUNÇÕES AUXILIARES
