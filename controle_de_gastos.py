@@ -150,7 +150,6 @@ if selected == 'Dashboard':
       
     temp_df_gastos = df_gastos.loc[(df_gastos.index >= pd.to_datetime(initial_period)) & (df_gastos.index <= pd.to_datetime(final_period))]
     temp_df_receitas = df_receitas.loc[(df_receitas.index >= pd.to_datetime(initial_period)) & (df_receitas.index <= pd.to_datetime(final_period))]
-    
 
 
 
@@ -158,14 +157,13 @@ if selected == 'Dashboard':
     temp_df_gastos = df_gastos.loc[(df_gastos.index >= pd.to_datetime(initial_period)) & (df_gastos.index <= pd.to_datetime(final_period))]
     temp_df_receitas = df_receitas.loc[(df_receitas.index >= pd.to_datetime(initial_period)) & (df_receitas.index <= pd.to_datetime(final_period))]
 
-    st.markdown('#')
     
     # Exibição
     col3, col3 = st.columns(2)
     with col1:
-        st.metric("Total Gastos", f"R$ {temp_df_gastos['valor'].sum():.2f}")
+        st.metric("Total Gastos no Período", f"R$ {temp_df_gastos['valor'].sum():.2f}")
     with col2:
-        st.metric("Total Receitas", f"R$ {temp_df_receitas['valor'].sum():.2f}")
+        st.metric("Total Receitas no Período", f"R$ {temp_df_receitas['valor'].sum():.2f}")
 
 
 
