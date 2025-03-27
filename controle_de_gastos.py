@@ -199,6 +199,41 @@ if selected == 'Dashboard':
     st.plotly_chart(fig, use_container_width=True)
 
 
+
+
+
+    # Resetar o índice
+    temp_df_receitas = temp_df_receitas.reset_index()
+    
+    # Formatar a data como string no formato DD-MM-YYYY
+    temp_df_receitas['data_formatada'] = temp_df_receitas['data'].dt.strftime('%d-%m-%Y')
+    
+    # Agrupamento por data formatada e categoria
+    receitas_agrupadas = temp_df_receitas.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index()
+    
+    # Gráfico de barras empilhadas
+    fig_receitas = px.bar(
+        receitas_agrupadas,
+        x='data_formatada',
+        y='valor',
+        color='categoria',
+        title='Receitas Diárias por Categoria',
+        labels={'data_formatada': 'Data', 'valor': 'Valor (R$)', 'categoria': 'Categoria'},
+        text_auto=True
+    )
+    
+    fig_receitas.update_layout(
+        xaxis_title='Data',
+        yaxis_title='Valor (R$)',
+        legend_title='Categoria',
+        barmode='stack'
+    )
+    
+    st.plotly_chart(fig_receitas, use_container_width=True)
+
+    
+
+
     col4, col5 = st.columns(2)
 
     with col4:
@@ -218,4 +253,24 @@ if selected == 'Dashboard':
         fig_pizza.update_traces(textinfo='percent+label')
         
         st.plotly_chart(fig_pizza, use_container_width=True)
+
+
+    with col5:
+
+        # Agrupa as receitas por categoria no período
+        receitas_por_categoria = temp_df_receitas.groupby('categoria')['valor'].sum().reset_index()
+        
+        # Gráfico de pizza (formato donut)
+        fig_pizza_receitas = px.pie(
+            receitas_por_categoria,
+            values='valor',
+            names='categoria',
+            title='Distribuição das Receitas por Categoria no Período',
+            hole=0.3  # Donut (opcional)
+        )
+        
+        fig_pizza_receitas.update_traces(textinfo='percent+label')
+        
+        st.plotly_chart(fig_pizza_receitas, use_container_width=True)
+
 
