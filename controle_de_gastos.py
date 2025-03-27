@@ -6,6 +6,7 @@ import requests
 import base64
 import os
 import warnings
+import calendar
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -120,16 +121,40 @@ if selected == 'Dashboard':
     df_gastos = pd.read_sql_query("SELECT * FROM gastos ORDER BY data DESC", conn)
     df_receitas = pd.read_sql_query("SELECT * FROM receitas ORDER BY data DESC", conn)
 
-    st.subheader("Gastos")
-    st.dataframe(df_gastos)
+    df_gastos.index = df_gastos['data']
+    df_gastos = df_gastos.drop(columns='data')
+    
+    # Data atual
+    hoje = datetime.date.today()
+    # Primeiro dia do mês
+    primeiro_dia = hoje.replace(day=1)
+    # Último dia do mês
+    ultimo_dia = hoje.replace(day=calendar.monthrange(hoje.year, hoje.month)[1])
 
-    st.subheader("Receitas")
-    st.dataframe(df_receitas)
+
+    initial_period = st.date_input("Data", primeiro_dia, format="DD.MM.YYYY")
+
+    final_period = st.date_input("Data", ultimo_dia, format="DD.MM.YYYY")
+
+
+    temp_df_gastos = df_gastos.loc[(df_gastos.index>=initial_period) & (df_gastos.index<=final_period)]
+
+    temp_df_receita = df_gastos.loc[(df_gastos.index>=initial_period) & (df_gastos.index<=final_period)]
+
+      
+
+    
+
+    # st.subheader("Gastos")
+    # st.dataframe(df_gastos)
+
+    # st.subheader("Receitas")
+    # st.dataframe(df_receitas)
 
     col1, col2 = st.columns(2)
     with col1:
-        total_gastos = df_gastos['valor'].sum()
+        total_gastos = temp_df_gastos['valor'].sum()
         st.metric("Total Gastos", f"R$ {total_gastos:.2f}")
     with col2:
-        total_receitas = df_receitas['valor'].sum()
+        total_receitas = temp_df_receita['valor'].sum()
         st.metric("Total Receitas", f"R$ {total_receitas:.2f}")
