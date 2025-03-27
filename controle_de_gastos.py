@@ -157,7 +157,7 @@ if selected == 'Dashboard':
     # st.dataframe(df_receitas)
 
 
-    st.markdown('##")
+    st.markdown('##')
 
     col1, col2 = st.columns(2)
     with col1:
