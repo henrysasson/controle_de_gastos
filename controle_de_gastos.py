@@ -190,11 +190,23 @@ if selected == 'Dashboard':
     # Resetar o índice para trabalhar com a coluna 'data'
     temp_df_gastos = temp_df_gastos.reset_index()
     
-    # Formatar a data como string no formato DD-MM-YYYY
+    # Criar uma nova coluna datetime para ordenação
+    temp_df_gastos['data_ordenacao'] = temp_df_gastos['data']
+    
+    # Formatar a data como string no formato DD-MM-YYYY para exibição
     temp_df_gastos['data_formatada'] = temp_df_gastos['data'].dt.strftime('%d-%m-%Y')
     
     # Agrupamento por data formatada e categoria
-    gastos_agrupados = temp_df_gastos.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index().sort_values(by='data_formatada')
+    gastos_agrupados = temp_df_gastos.groupby(
+        ['data_ordenacao', 'data_formatada', 'categoria']
+    )['valor'].sum().reset_index()
+    
+    # Ordenar pela data datetime
+    gastos_agrupados = gastos_agrupados.sort_values(by='data_ordenacao')
+    
+    # Remover a coluna auxiliar de ordenação, se não for mais necessária
+    gastos_agrupados = gastos_agrupados.drop(columns='data_ordenacao')
+
     
     # Gráfico de barras empilhadas
     fig = px.bar(
@@ -223,11 +235,23 @@ if selected == 'Dashboard':
     # Resetar o índice
     temp_df_receitas = temp_df_receitas.reset_index()
     
-    # Formatar a data como string no formato DD-MM-YYYY
+    # Criar uma nova coluna datetime para ordenação
+    temp_df_receitas['data_ordenacao'] = temp_df_receitas['data']
+    
+    # Formatar a data como string apenas para exibição
     temp_df_receitas['data_formatada'] = temp_df_receitas['data'].dt.strftime('%d-%m-%Y')
     
     # Agrupamento por data formatada e categoria
-    receitas_agrupadas = temp_df_receitas.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index().sort_values(by='data_formatada')
+    receitas_agrupadas = temp_df_receitas.groupby(
+        ['data_ordenacao', 'data_formatada', 'categoria']
+    )['valor'].sum().reset_index()
+    
+    # Ordenar pela data datetime
+    receitas_agrupadas = receitas_agrupadas.sort_values(by='data_ordenacao')
+    
+    # Se quiser, pode descartar a coluna 'data_ordenacao' depois:
+    receitas_agrupadas = receitas_agrupadas.drop(columns='data_ordenacao')
+
     
     # Gráfico de barras empilhadas
     fig_receitas = px.bar(
