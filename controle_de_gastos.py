@@ -33,7 +33,7 @@ if selected == 'Input':
     " ",
     ["Gasto", "Receita"])
 
-    st.markdown('##')
+    # st.markdown('##')
 
     if input_type == "Gasto":
 
