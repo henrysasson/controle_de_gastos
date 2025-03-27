@@ -187,27 +187,29 @@ if selected == 'Dashboard':
 
 
 
-    # Resetar o índice para trabalhar com a coluna 'data'
+    # Resetar o índice
     temp_df_gastos = temp_df_gastos.reset_index()
     
-    # Criar uma nova coluna datetime para ordenação
+    # Criar coluna para ordenação
     temp_df_gastos['data_ordenacao'] = temp_df_gastos['data']
     
-    # Formatar a data como string no formato DD-MM-YYYY para exibição
+    # Formatar a data como string
     temp_df_gastos['data_formatada'] = temp_df_gastos['data'].dt.strftime('%d-%m-%Y')
     
-    # Agrupamento por data formatada e categoria
+    # Agrupar por data e categoria
     gastos_agrupados = temp_df_gastos.groupby(
         ['data_ordenacao', 'data_formatada', 'categoria']
     )['valor'].sum().reset_index()
     
-    # Ordenar pela data datetime
+    # Ordenar cronologicamente
     gastos_agrupados = gastos_agrupados.sort_values(by='data_ordenacao')
     
-    # Remover a coluna auxiliar de ordenação, se não for mais necessária
+    # ✅ Setar o índice ANTES de remover a coluna
+    gastos_agrupados.index = gastos_agrupados['data_ordenacao']
+    
+    # Agora pode remover, se quiser
     gastos_agrupados = gastos_agrupados.drop(columns='data_ordenacao')
 
-    gastos_agrupados.index = gastos_agrupados['data_ordenacao']
 
     
     # Gráfico de barras empilhadas
