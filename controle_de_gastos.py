@@ -268,7 +268,7 @@ if selected == 'Dashboard':
 
     
     # Gráfico de barras empilhadas
-    fig = px.bar(
+    fig_receitas = px.bar(
     receitas_agrupadas,
     x='data_formatada',
     y='valor',
