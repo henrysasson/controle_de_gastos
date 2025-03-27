@@ -120,29 +120,39 @@ if selected == 'Dashboard':
 
     df_gastos = pd.read_sql_query("SELECT * FROM gastos ORDER BY data DESC", conn)
     df_receitas = pd.read_sql_query("SELECT * FROM receitas ORDER BY data DESC", conn)
-
-    df_gastos.index = df_gastos['data']
-    df_gastos = df_gastos.drop(columns='data')
+    
+    # Converter 'data' para datetime e setar como índice
+    df_gastos['data'] = pd.to_datetime(df_gastos['data'])
+    df_receitas['data'] = pd.to_datetime(df_receitas['data'])
+    
+    df_gastos = df_gastos.set_index('data')
+    df_receitas = df_receitas.set_index('data')
     
     # Data atual
     hoje = datetime.date.today()
-    # Primeiro dia do mês
     primeiro_dia = hoje.replace(day=1)
-    # Último dia do mês
     ultimo_dia = hoje.replace(day=calendar.monthrange(hoje.year, hoje.month)[1])
+    
+    # Inputs
+    initial_period = st.date_input("Início do Período", primeiro_dia, format="DD.MM.YYYY")
+    final_period = st.date_input("Fim do Período", ultimo_dia, format="DD.MM.YYYY")
+    
+    # Filtro
 
 
-    initial_period = st.date_input("Data", primeiro_dia, format="DD.MM.YYYY")
+    col1, col2= st.columns(2)
 
-    final_period = st.date_input("Data", ultimo_dia, format="DD.MM.YYYY")
+    with col1:
+        initial_period = st.date_input("Início", primeiro_dia, format="DD.MM.YYYY")
+
+    with col2:    
+        final_period = st.date_input("Fim", ultimo_dia, format="DD.MM.YYYY")
 
 
-    temp_df_gastos = df_gastos.loc[(df_gastos.index>=initial_period) & (df_gastos.index<=final_period)]
-
-    temp_df_receita = df_gastos.loc[(df_gastos.index>=initial_period) & (df_gastos.index<=final_period)]
 
       
-
+    temp_df_gastos = df_gastos.loc[(df_gastos.index >= pd.to_datetime(initial_period)) & (df_gastos.index <= pd.to_datetime(final_period))]
+    temp_df_receitas = df_receitas.loc[(df_receitas.index >= pd.to_datetime(initial_period)) & (df_receitas.index <= pd.to_datetime(final_period))]
     
 
     # st.subheader("Gastos")
