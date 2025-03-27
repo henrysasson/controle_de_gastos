@@ -137,12 +137,12 @@ if selected == 'Dashboard':
     
  
     # Filtro
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2= st.columns(2)
 
     with col1:
         initial_period = st.date_input("Início", primeiro_dia, format="DD.MM.YYYY")
 
-    with col4:    
+    with col2:    
         final_period = st.date_input("Fim", ultimo_dia, format="DD.MM.YYYY")
 
 
@@ -160,7 +160,7 @@ if selected == 'Dashboard':
     temp_df_receitas = df_receitas.loc[(df_receitas.index >= pd.to_datetime(initial_period)) & (df_receitas.index <= pd.to_datetime(final_period))]
     
     # Exibição
-    col1, col2 = st.columns(2)
+    col3, col3 = st.columns(2)
     with col1:
         st.metric("Total Gastos", f"R$ {temp_df_gastos['valor'].sum():.2f}")
     with col2:
@@ -199,7 +199,7 @@ if selected == 'Dashboard':
     st.plotly_chart(fig, use_container_width=True)
 
 
-    col3, col4 = st.columns(2)
+    col4, col5 = st.columns(2)
 
     with col3:
 
