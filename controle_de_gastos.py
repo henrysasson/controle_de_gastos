@@ -164,5 +164,5 @@ if selected == 'Dashboard':
         total_gastos = temp_df_gastos['valor'].sum()
         st.metric("Total Gastos", f"R$ {total_gastos:.2f}")
     with col2:
-        total_receitas = temp_df_receita['valor'].sum()
+        total_receitas = temp_df_receitas['valor'].sum()
         st.metric("Total Receitas", f"R$ {total_receitas:.2f}")
