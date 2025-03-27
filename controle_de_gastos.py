@@ -40,7 +40,7 @@ if selected == 'Input':
         # DATA
         date = d = st.date_input("Data", datetime.datetime.now(), format="DD.MM.YYYY")
 
-        st.markdown('##')
+        # st.markdown('##')
 
         # VALOR
         value = st.number_input("Valor (R$)", value=0.00, format="%0.2f")
@@ -53,7 +53,7 @@ if selected == 'Input':
                     placeholder="Selecione a categoria",
                     )
         
-        st.markdown('##')
+        # st.markdown('##')
 
         # DESCRIÇÃO
         description = st.text_input("Descrição",
