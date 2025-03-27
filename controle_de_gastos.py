@@ -194,7 +194,7 @@ if selected == 'Dashboard':
     temp_df_gastos['data_formatada'] = temp_df_gastos['data'].dt.strftime('%d-%m-%Y')
     
     # Agrupamento por data formatada e categoria
-    gastos_agrupados = temp_df_gastos.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index().sort_values(by='data_formatada)
+    gastos_agrupados = temp_df_gastos.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index().sort_values(by='data_formatada')
     
     # Gráfico de barras empilhadas
     fig = px.bar(
@@ -227,7 +227,7 @@ if selected == 'Dashboard':
     temp_df_receitas['data_formatada'] = temp_df_receitas['data'].dt.strftime('%d-%m-%Y')
     
     # Agrupamento por data formatada e categoria
-    receitas_agrupadas = temp_df_receitas.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index().sort_values(by='data_formatada)
+    receitas_agrupadas = temp_df_receitas.groupby(['data_formatada', 'categoria'])['valor'].sum().reset_index().sort_values(by='data_formatada')
     
     # Gráfico de barras empilhadas
     fig_receitas = px.bar(
