@@ -76,7 +76,7 @@ cursor.execute('''
 conn.commit()
 
 # INTERFACE DE INPUT
-if selected == 'Input':
+if selected == 'Adicionar Transação':
     st.title('Adicionar Transação')
     st.markdown('---')
 
