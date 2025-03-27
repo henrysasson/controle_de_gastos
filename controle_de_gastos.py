@@ -159,10 +159,19 @@ if selected == 'Dashboard':
 
     
     # Exibição
-    col3, col3 = st.columns(2)
-    with col1:
-        st.metric("Total Gastos no Período", f"R$ {temp_df_gastos['valor'].sum():.2f}")
-    with col2:
+    col3, col4, col5 = st.columns(2)
+    meta = 3000
+    
+    with col3:
+        if temp_df_gastos['valor'] > meta:
+            delta="Acima do Limite"
+            st.metric("Total Gastos no Período", f"R$ {temp_df_gastos['valor'].sum():.2f}", delta)
+        else:
+            st.metric("Total Gastos no Período", f"R$ {temp_df_gastos['valor'].sum():.2f}")
+    with col4:
+        st.metric(f"Distância da Meta (R$ {meta:.2f})", f"R$ {(meta - temp_df_gastos['valor'].sum()):.2f}")
+    
+    with col5:
         st.metric("Total Receitas no Período", f"R$ {temp_df_receitas['valor'].sum():.2f}")
 
 
@@ -198,7 +207,7 @@ if selected == 'Dashboard':
     st.plotly_chart(fig, use_container_width=True)
 
 
-
+    
 
 
     # Resetar o índice
@@ -233,9 +242,9 @@ if selected == 'Dashboard':
     
 
 
-    col4, col5 = st.columns(2)
+    col6, col7 = st.columns(2)
 
-    with col4:
+    with col6:
 
         # Agrupa os gastos por categoria no período
         gastos_por_categoria = temp_df_gastos.groupby('categoria')['valor'].sum().reset_index()
@@ -254,7 +263,7 @@ if selected == 'Dashboard':
         st.plotly_chart(fig_pizza, use_container_width=True)
 
 
-    with col5:
+    with col7:
 
         # Agrupa as receitas por categoria no período
         receitas_por_categoria = temp_df_receitas.groupby('categoria')['valor'].sum().reset_index()
