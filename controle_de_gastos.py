@@ -61,14 +61,14 @@ if selected == 'Input':
                                     placeholder="Descrição curta do gasto (Ifood, Cinema, ...)",
                                 )
 
-        st.markdown('##')
+        # st.markdown('##')
 
         # FORMA DE PAGAMENTO
         payment = st.selectbox("Forma de Pagamento",
                     ("Crédito", "PIX", "Dinheiro", "Débito"),
                     placeholder="Selecione a forma de pagamento",)
         
-        st.markdown('##')
+        # st.markdown('##')
 
         # RECORRNTE
         recurrence = st.selectbox("Recorrente?",
@@ -81,12 +81,12 @@ if selected == 'Input':
         # DATA
         date = d = st.date_input("Data", datetime.datetime.now(), format="DD.MM.YYYY")
 
-        st.markdown('##')
+        # st.markdown('##')
 
         # VALOR
         value = st.number_input("Valor (R$)", value=0.00, format="%0.2f")
 
-        st.markdown('##')
+        # st.markdown('##')
 
         # CATEGORIA
         category = st.selectbox("Categoria",
