@@ -137,12 +137,12 @@ if selected == 'Dashboard':
     
  
     # Filtro
-    col1, col2= st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         initial_period = st.date_input("Início", primeiro_dia, format="DD.MM.YYYY")
 
-    with col2:    
+    with col4:    
         final_period = st.date_input("Fim", ultimo_dia, format="DD.MM.YYYY")
 
 
@@ -197,4 +197,25 @@ if selected == 'Dashboard':
     )
     
     st.plotly_chart(fig, use_container_width=True)
+
+
+    col3, col4 = st.columns(2)
+
+    with col3:
+
+        # Agrupa os gastos por categoria no período
+        gastos_por_categoria = temp_df_gastos.groupby('categoria')['valor'].sum().reset_index()
+        
+        # Gráfico de pizza
+        fig_pizza = px.pie(
+            gastos_por_categoria,
+            values='valor',
+            names='categoria',
+            title='Distribuição dos Gastos por Categoria no Período',
+            hole=0.3  # donut chart (ou remova para pizza tradicional)
+        )
+        
+        fig_pizza.update_traces(textinfo='percent+label')
+        
+        st.plotly_chart(fig_pizza, use_container_width=True)
 
