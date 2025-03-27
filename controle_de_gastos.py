@@ -198,7 +198,7 @@ if selected == 'Dashboard':
     
     # Gráfico de barras empilhadas
     fig = px.bar(
-        gastos_agrupados,
+        gastos_agrupados.sort_values(by='data_formatada'),
         x='data_formatada',
         y='valor',
         color='categoria',
